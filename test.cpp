@@ -1,11 +1,11 @@
 #include "Thread_Pool.h"
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <iostream>
 
 void mytask(void *arg)
 {
-    printf("thread %lu is working on task %d\n", (uintptr_t)pthread_self(), *(int*)arg);
+    std::cout << "thread " << (uintptr_t)pthread_self() << " is working on task " <<  *(int*)arg <<"\n";
     sleep(1);
     free(arg);
     return;
@@ -22,7 +22,7 @@ int main(void)
         //int *arg = malloc(sizeof(int));
         //*arg = i;
         int *arg = new int(i);
-        printf("Create Task %d\n",i);
+        std::cout << "Create Task " << i << "\n";
         Thread_Pool::add_task(mytask, arg);
         
     }
