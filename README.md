@@ -110,4 +110,4 @@ int main(){
 Thread_Pool::destroy();
 ```
 
-+ **Attention!** When the destroy() function is called, the pool will wait for the threads which are running to stop. However, the tasks which are still in the queue will be destroied instead of handled by threads.
++ **Attention!** When the destroy() function is called, the pool will wait for the threads which are running to stop. However, the tasks which are still in the queue will be destroied instead of handled by threads. Or, you can call by destroy(true), then the pool will force destroy all threads and tasks without waiting.

@@ -88,15 +88,18 @@ void Thread_Pool::destroy(bool force){
             pthread_cond_wait(&Cond, &Mutex);
         }
         pthread_mutex_unlock(&Mutex);
-        pthread_mutex_destroy(&Mutex);
-        pthread_cond_destroy(&Cond);
     }
 
+    pthread_mutex_lock(&Mutex);
     while(start != NULL){
         Task *t = start;
         start = t->next;
         cout << "Destroy Task" << t->arg <<endl;
         free(t);
     }
+    pthread_mutex_unlock(&Mutex);
+
+    pthread_mutex_destroy(&Mutex);
+    pthread_cond_destroy(&Cond);
     cout<<"Thread Pool Destroied"<<endl;
 }
