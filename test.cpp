@@ -26,6 +26,6 @@ int main(void)
         Thread_Pool::add_task(mytask, arg);
         
     }
-    Thread_Pool::destroy();
+    Thread_Pool::destroy(true);
     return 0;
 }

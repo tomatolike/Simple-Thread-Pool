@@ -54,6 +54,7 @@ void Thread_Pool::initial(int max_thread_num){
         pthread_t tid;
         pthread_create(&tid,NULL,run,NULL);
     }
+    cout << "Thread Pool Initialized" <<endl;
 }
 
 void Thread_Pool::add_task(void (*run)(void *arg), void *arg){
@@ -78,6 +79,7 @@ void Thread_Pool::add_task(void (*run)(void *arg), void *arg){
 }
 
 void Thread_Pool::destroy(bool force){
+    
     if(!force){
         pthread_mutex_lock(&Mutex);
         quit = true;
@@ -89,17 +91,19 @@ void Thread_Pool::destroy(bool force){
         }
         pthread_mutex_unlock(&Mutex);
     }
-
+    
     pthread_mutex_lock(&Mutex);
     while(start != NULL){
         Task *t = start;
         start = t->next;
-        cout << "Destroy Task" << t->arg <<endl;
+        
         free(t);
     }
     pthread_mutex_unlock(&Mutex);
 
+    
     pthread_mutex_destroy(&Mutex);
+    
     pthread_cond_destroy(&Cond);
     cout<<"Thread Pool Destroied"<<endl;
 }
