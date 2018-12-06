@@ -77,18 +77,20 @@ void Thread_Pool::add_task(void (*run)(void *arg), void *arg){
     pthread_mutex_unlock(&Mutex);
 }
 
-void Thread_Pool::destroy(){
-    pthread_mutex_lock(&Mutex);
-    quit = true;
-    if(idle_thread > 0){
-        pthread_cond_broadcast(&Cond);
+void Thread_Pool::destroy(bool force){
+    if(!force){
+        pthread_mutex_lock(&Mutex);
+        quit = true;
+        if(idle_thread > 0){
+            pthread_cond_broadcast(&Cond);
+        }
+        if(running_thread > 0){
+            pthread_cond_wait(&Cond, &Mutex);
+        }
+        pthread_mutex_unlock(&Mutex);
+        pthread_mutex_destroy(&Mutex);
+        pthread_cond_destroy(&Cond);
     }
-    if(running_thread > 0){
-        pthread_cond_wait(&Cond, &Mutex);
-    }
-    pthread_mutex_unlock(&Mutex);
-    pthread_mutex_destroy(&Mutex);
-    pthread_cond_destroy(&Cond);
 
     while(start != NULL){
         Task *t = start;

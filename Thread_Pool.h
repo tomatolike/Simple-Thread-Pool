@@ -27,7 +27,7 @@ class Thread_Pool{
     public:
         static void initial(int max_thread_num);
         static void add_task(void (*run)(void *arg), void *arg);
-        static void destroy();
+        static void destroy(bool force = false);
 };
 
 #endif
